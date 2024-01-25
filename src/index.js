@@ -1,17 +1,77 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const jsonData = {
+  data: [
+    {
+      name: "Cosmetics",
+      productList: [
+        {
+          name: "Hair Oil",
+          price: 122,
+        },
+        {
+          name: "Face wash",
+          price: 123,
+        },
+      ],
+    },
+    {
+      name: "Household",
+      productList: [
+        {
+          name: "Hair Oil",
+          price: 122,
+        },
+        {
+          name: "Face wash",
+          price: 123,
+        },
+      ],
+    },
+  ],
+};
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const App = () => {
+  const [cart, setCart] = useState([]);
+
+  const addToCart = (product) => {
+    setCart((prevCart) => [...prevCart, product]);
+    console.log("Product Added to the cart.");
+    console.log("List of products present in cart array:", cart);
+  };
+
+  const removeFromCart = (product) => {
+    const updatedCart = cart.filter((item) => item !== product);
+    setCart(updatedCart);
+    console.log("Product removed from the cart.");
+    console.log("List of products present in cart array:", updatedCart);
+  };
+
+  const renderProducts = () => {
+    return jsonData.data.map((category) => (
+      <div key={category.name}>
+        <h2>{category.name}</h2>
+        <hr />
+        <div className="product-container">
+          {category.productList.map((product) => (
+            <div key={product.name} className="product-box">
+              <p>Name: {`${product.name}`}</p>
+              <p>Price: {product.price}</p>
+              <br />
+              <button onClick={() => addToCart(product)}>Add to Cart</button>
+              <button onClick={() => removeFromCart(product)}>
+                Remove from Cart
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    ));
+  };
+
+  return <div className="App">{renderProducts()}</div>;
+};
+
+ReactDOM.render(<App />, document.getElementById("app"));
